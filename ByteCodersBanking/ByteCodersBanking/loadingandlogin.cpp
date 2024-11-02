@@ -3,8 +3,11 @@
 #include <SFML/Window.hpp>
 #include <cstdlib> // For std::rand()
 #include <iostream> // For debugging purposes
+#include <ctime> // For time functions
+#include <string>
+#include <cctype> // For std::isalnum
 
-// Declare global variables for UI elements and state management
+// UI elements and state variables
 sf::RectangleShape textBox;
 sf::RectangleShape loginButton;
 sf::Text emailLabel;
@@ -14,54 +17,92 @@ sf::Font font;
 std::string emailInput;
 bool emailInputActive = false;
 
-// Variables for the login process
-unsigned int windowWidth, windowHeight; // Variables for the window size
-std::string UserID; // Variable for User ID
-std::string LogInCode; // Variable for Login Code
-bool loaded = false; // Variable to control the loading state
-bool isLoginActive = false; // Flag to manage login state
+// Login process variables
+unsigned int windowWidth, windowHeight;
+std::string UserID;
+std::string LogInCode;
+std::string enteredCode;  // To hold the user-entered code in verification phase
+std::string emailAddress; // To store the email after initial submission
+bool loaded = false;
+bool isLoginActive = false;
+bool isVerificationPhase = false;  // Flag to track login vs verification phase
+sf::Clock verificationTimer;  // Timer for code expiration
+bool isCodeExpired = false;    // Flag to check if code is expired
 
 sf::Clock buttonTimer;
-bool isButtonPressed = false; // Flag to check if button was pressed
-const float BUTTON_COLOR_CHANGE_DURATION = 0.5f; // Duration for which the button should be red
+bool isButtonPressed = false;
+const float BUTTON_COLOR_CHANGE_DURATION = 0.5f;
 
+// Function to generate a random alphanumeric code
+std::string generateRandomCode(int length) {
+    const char alphanum[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    std::string code;
+
+    for (int i = 0; i < length; ++i) {
+        code += alphanum[std::rand() % (sizeof(alphanum) - 1)]; // Exclude null terminator
+    }
+    return code;
+}
+
+// Function to handle user input events
 void handleInput(sf::Event event) {
     if (isLoginActive) {
-        // Handle text input
-        if (event.type == sf::Event::TextEntered) {
-            if (emailInputActive) { // If the text box is active
-                if (event.text.unicode < 128) { // Only accept ASCII input
-                    if (event.text.unicode == '\b' && !emailInput.empty()) {
-                        emailInput.pop_back(); // Handle backspace
-                    }
-                    else if (event.text.unicode != '\r') { // Ignore Enter key
-                        emailInput += static_cast<char>(event.text.unicode); // Add character to input
-                    }
+        if (event.type == sf::Event::TextEntered && emailInputActive) {
+            if (event.text.unicode < 128) { // ASCII only
+                if (event.text.unicode == '\b' && !emailInput.empty()) {
+                    emailInput.pop_back(); // Backspace handling
+                }
+                else if (event.text.unicode != '\r') {
+                    emailInput += static_cast<char>(event.text.unicode); // Append valid character
                 }
             }
         }
+        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            emailInputActive = textBox.getGlobalBounds().contains(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
 
-        // Handle mouse click events
-        if (event.type == sf::Event::MouseButtonPressed) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                // Check if the click is within the bounds of the text box
-                emailInputActive = textBox.getGlobalBounds().contains(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
+            if (loginButton.getGlobalBounds().contains(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y))) {
+                if (!isVerificationPhase) {
+                    // Email submission phase
+                    if (emailInput.find("@gmail.com") != std::string::npos ||
+                        emailInput.find("@abv.bg") != std::string::npos ||
+                        emailInput.find("@outlook.com") != std::string::npos) {
+                        emailAddress = emailInput;  // Store the email address
+                        std::cout << "Email submitted: " << emailInput << std::endl;
 
-                // Check if the click is within the bounds of the login button
-                if (loginButton.getGlobalBounds().contains(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y))) {
-                    // Validate the email input
-                    if ((emailInput.find("@gmail.com") != std::string::npos) ||
-                        (emailInput.find("@abv.bg") != std::string::npos) ||
-                        (emailInput.find("@outlook.com") != std::string::npos)) {
+                        // Generate and send verification code (In a real app, you would send this via email)
+                        LogInCode = generateRandomCode(5);  // Generate a random 5-character code
+                        std::cout << "Verification code sent to " << emailAddress << ": " << LogInCode << std::endl;
 
-                        // Handle login button click
-                        std::cout << "Email submitted: " << emailInput << std::endl; // For debugging purposes
+                        // Start the verification timer
+                        verificationTimer.restart();
+                        isVerificationPhase = true;
+                        emailInput.clear();  // Clear input for code entry
+
+                        // Update UI for verification phase
+                        loginText.setString("VERIFY");
+                        emailLabel.setString("Code");
+                        loginButton.setFillColor(sf::Color::Green);  // Indicate transition to verification
+                        isCodeExpired = false; // Reset expired flag
                     }
                     else {
                         // Invalid email, turn the login button red
                         loginButton.setFillColor(sf::Color::Red);
-                        isButtonPressed = true; // Set the flag that the button was pressed
-                        buttonTimer.restart(); // Restart the timer
+                        isButtonPressed = true;
+                        buttonTimer.restart();
+                    }
+                }
+                else {
+                    // Verification phase
+                    if (emailInput == LogInCode) {
+                        std::cout << "Verification successful!" << std::endl;
+                        loginButton.setFillColor(sf::Color::Green);
+                        // Transition to the next stage, if applicable
+                    }
+                    else {
+                        loginButton.setFillColor(sf::Color::Red);  // Incorrect code
+                        isButtonPressed = true;
+                        buttonTimer.restart();
+                        std::cout << "Incorrect verification code entered!" << std::endl;
                     }
                 }
             }
@@ -69,152 +110,131 @@ void handleInput(sf::Event event) {
     }
 }
 
+// Loading and resizing function for the window and UI elements
 void loadAndResize() {
-    // Create a borderless window with an initial size of 400x200 pixels
+    // Initial window setup
     sf::RenderWindow window(sf::VideoMode(400, 200), "Banking App", sf::Style::None);
+    sf::Clock clock;
 
-    // Display the window for 5 seconds before resizing
-    sf::Clock clock; // Create a clock to measure elapsed time
-    while (window.isOpen()) {
+    // Display initial black screen for 5 seconds
+    while (window.isOpen() && clock.getElapsedTime().asSeconds() < 5) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
+            if (event.type == sf::Event::Closed) window.close();
         }
-
-        window.clear(sf::Color::Black); // Clear the window
+        window.clear(sf::Color::Black);
         window.display();
-
-        // Wait for approximately 5 seconds
-        if (clock.getElapsedTime().asSeconds() >= 5) {
-            break; // Exit the loop after 5 seconds
-        }
     }
 
-    // Get the screen dimensions for resizing
+    // Resizing window to 60% of the screen
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
-    windowWidth = static_cast<unsigned int>(desktopMode.width * 0.6); // Store the new width
-    windowHeight = static_cast<unsigned int>(desktopMode.height * 0.6); // Store the new height
-
-    // Change the window size, make it windowed, and set the title
+    windowWidth = static_cast<unsigned int>(desktopMode.width * 0.6);
+    windowHeight = static_cast<unsigned int>(desktopMode.height * 0.6);
     window.create(sf::VideoMode(windowWidth, windowHeight), "ByteCoders Loader", sf::Style::Titlebar | sf::Style::Close);
 
-    // Load the background image
+    // Background image setup
     sf::Texture backgroundTexture;
-    if (!backgroundTexture.loadFromFile("content/images/LogIn.png")) { // Update with your image path
-        return; // Exit the function if loading fails
-    }
+    if (!backgroundTexture.loadFromFile("content/images/LogIn.png")) return;
     sf::Sprite backgroundSprite(backgroundTexture);
-
-    // Scale the background to fit the window
     backgroundSprite.setScale(
         static_cast<float>(windowWidth) / backgroundTexture.getSize().x,
         static_cast<float>(windowHeight) / backgroundTexture.getSize().y
     );
 
-    // Load the font
-    if (!font.loadFromFile("content/fonts/SourceSansPro-Bold.otf")) { // Update with your font path
-        return; // Exit the function if loading fails
-    }
+    // Font loading
+    if (!font.loadFromFile("content/fonts/SourceSansPro-Bold.otf")) return;
 
-    // Prepare the warning message for email verification
-    warningText.setString("Please make sure to write your correct email address so you can safely log in or you might trigger the automatic fraud detector");
+    // Warning message setup
+    warningText.setString("Please ensure you enter the correct details for safe login.");
     warningText.setFont(font);
-    warningText.setCharacterSize(20); // Text size 20 for warning
-    warningText.setFillColor(sf::Color::Red); // Set color to red
+    warningText.setCharacterSize(20);
+    warningText.setFillColor(sf::Color::Red);
 
-    // Generate the Login Code
-    LogInCode = std::to_string(std::rand() % 100000); // Generate a random 5-digit code
-
-    // Prepare the UI elements
+    // Login text setup
     loginText.setString("LOG IN");
     loginText.setFont(font);
-    loginText.setCharacterSize(50); // Text size 50
-    loginText.setFillColor(sf::Color::White); // Set color to white
-    loginText.setPosition(windowWidth / 2 - loginText.getGlobalBounds().width / 2, 50); // Centered
+    loginText.setCharacterSize(50);
+    loginText.setFillColor(sf::Color::White);
+    loginText.setPosition(windowWidth / 2 - loginText.getGlobalBounds().width / 2, 50);
 
-    // Text box for email input
-    textBox.setSize(sf::Vector2f(300, 50)); // Width 300, Height 50
-    textBox.setFillColor(sf::Color(255, 255, 255, 255)); // White background
-    textBox.setPosition(windowWidth / 2 - textBox.getSize().x / 2, windowHeight / 2 - textBox.getSize().y / 2); // Centered
+    // UI element properties
+    textBox.setSize(sf::Vector2f(300, 50));
+    textBox.setFillColor(sf::Color::White);
+    textBox.setPosition(windowWidth / 2 - textBox.getSize().x / 2, windowHeight / 2 - textBox.getSize().y / 2);
 
-    // Button for login
-    loginButton.setSize(sf::Vector2f(200, 50)); // Width 200, Height 50
-    loginButton.setFillColor(sf::Color::Blue); // Blue button
-    loginButton.setPosition(windowWidth / 2 - loginButton.getSize().x / 2, textBox.getPosition().y + textBox.getSize().y + 20); // Centered below text box
+    loginButton.setSize(sf::Vector2f(200, 50));
+    loginButton.setFillColor(sf::Color::Blue);
+    loginButton.setPosition(windowWidth / 2 - loginButton.getSize().x / 2, textBox.getPosition().y + textBox.getSize().y + 20);
 
-    // Label for email
     emailLabel.setString("Email");
     emailLabel.setFont(font);
-    emailLabel.setCharacterSize(30); // Label size 30
-    emailLabel.setFillColor(sf::Color::White); // Set label color to white
-    emailLabel.setPosition(windowWidth / 2 - emailLabel.getGlobalBounds().width / 2, textBox.getPosition().y - 40); // Centered above text box
+    emailLabel.setCharacterSize(30);
+    emailLabel.setFillColor(sf::Color::White);
+    emailLabel.setPosition(windowWidth / 2 - emailLabel.getGlobalBounds().width / 2, textBox.getPosition().y - 40);
 
-    // Position warning text below the login button
-    warningText.setPosition(windowWidth / 2 - warningText.getGlobalBounds().width / 2, loginButton.getPosition().y + loginButton.getSize().y + 10); // Centered below the login button
+    warningText.setPosition(windowWidth / 2 - warningText.getGlobalBounds().width / 2, loginButton.getPosition().y + loginButton.getSize().y + 10);
 
-    // Mark loaded as true
     loaded = true;
-
-    // Start in login state
     isLoginActive = true;
 
-    // Main event loop for the resized window
+    // Main event loop
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-                window.close();
-            handleInput(event); // Call input handling function
+            if (event.type == sf::Event::Closed) window.close();
+            handleInput(event);
         }
 
-        // Check for hover effect on login button
+        // Hover effect for the login button
         if (loginButton.getGlobalBounds().contains(static_cast<float>(sf::Mouse::getPosition(window).x), static_cast<float>(sf::Mouse::getPosition(window).y))) {
-            if (!isButtonPressed) { // Only change color if button is not pressed
-                loginButton.setFillColor(sf::Color::White); // Change button color on hover
-            }
+            if (!isButtonPressed) loginButton.setFillColor(sf::Color::White);
         }
-        else {
-            if (!isButtonPressed) {
-                loginButton.setFillColor(sf::Color::Blue); // Reset button color
-            }
+        else if (!isButtonPressed) {
+            loginButton.setFillColor(sf::Color::Blue);
         }
 
-        // Update text box color when active
-        if (emailInputActive) {
-            textBox.setFillColor(sf::Color(134, 174, 230)); // Light blue when active
-        }
-        else {
-            textBox.setFillColor(sf::Color(255, 255, 255)); // Reset to white
+        // Check if the verification code has expired after 60 seconds
+        if (isVerificationPhase && verificationTimer.getElapsedTime().asSeconds() > 60) {
+            std::cout << "Verification code has expired." << std::endl;
+            isCodeExpired = true;  // Set expired flag
+            isVerificationPhase = false;  // Reset back to login phase
+            emailInput.clear();  // Clear the email input for re-entry
+            emailLabel.setString("Email");
+            loginText.setString("LOG IN");
+            loginButton.setFillColor(sf::Color::Blue);  // Reset button color
         }
 
-        // Reset button color if it's been red for long enough
+        // Text box color when active
+        textBox.setFillColor(emailInputActive ? sf::Color(134, 174, 230) : sf::Color::White);
+
+        // Reset button color after specified duration
         if (isButtonPressed && buttonTimer.getElapsedTime().asSeconds() > BUTTON_COLOR_CHANGE_DURATION) {
-            loginButton.setFillColor(sf::Color::Blue); // Reset to original color
-            isButtonPressed = false; // Reset the flag
+            loginButton.setFillColor(sf::Color::Blue);
+            isButtonPressed = false;
         }
 
-        window.clear(); // Clear the window
-        window.draw(backgroundSprite); // Draw the background
-        window.draw(loginText); // Draw "LOG IN" text
-        window.draw(emailLabel); // Draw the email label
-        window.draw(textBox); // Draw the text box
-        window.draw(loginButton); // Draw the login button
-        window.draw(warningText); // Draw the warning message
+        // Rendering
+        window.clear();
+        window.draw(backgroundSprite);
+        window.draw(loginText);
+        window.draw(emailLabel);
+        window.draw(textBox);
+        window.draw(loginButton);
+        window.draw(warningText);
 
-        // Draw email input text inside the text box
-        sf::Text inputText(emailInput, font, 30); // Input size 30
-        inputText.setFillColor(sf::Color::Black); // Set input text color to black
-        inputText.setPosition(textBox.getPosition().x + 10, textBox.getPosition().y + 10); // Position inside the text box
-        window.draw(inputText); // Draw the input text
+        // Display email or code input text
+        sf::Text inputText(emailInput, font, 30);
+        inputText.setFillColor(sf::Color::Black);
+        inputText.setPosition(textBox.getPosition().x + 10, textBox.getPosition().y + 10);
+        window.draw(inputText);
 
-        // Draw "LOG IN" text on the button
-        sf::Text buttonText("LOG IN", font, 30); // Button text size 30
-        buttonText.setFillColor(sf::Color::White); // Set button text color to white
+        // Draw "LOG IN" or "VERIFY" on the button
+        sf::Text buttonText(isVerificationPhase ? "VERIFY" : "LOG IN", font, 30);
+        buttonText.setFillColor(sf::Color::White);
         buttonText.setPosition(loginButton.getPosition().x + loginButton.getSize().x / 2 - buttonText.getGlobalBounds().width / 2,
-            loginButton.getPosition().y + loginButton.getSize().y / 2 - buttonText.getGlobalBounds().height / 2); // Centered on button
+            loginButton.getPosition().y + loginButton.getSize().y / 2 - buttonText.getGlobalBounds().height / 2);
         window.draw(buttonText);
 
-        window.display(); // Display everything drawn in the current frame
+        window.display();
     }
 }

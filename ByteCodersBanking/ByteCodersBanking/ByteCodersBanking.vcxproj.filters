@@ -32,7 +32,7 @@
     <ClInclude Include="loading.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="logIn.h">
+    <ClInclude Include="verify.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
