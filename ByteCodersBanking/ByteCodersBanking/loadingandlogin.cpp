@@ -6,6 +6,7 @@
 #include <ctime> // For time functions
 #include <string>
 #include <cctype> // For std::isalnum
+#include "Python/Python.h"
 
 // UI elements and state variables
 sf::RectangleShape textBox;
@@ -44,34 +45,104 @@ std::string generateRandomCode(int length) {
     return code;
 }
 
-// Function to handle user input events
+// Function to send email using embedded Python
+void sendEmail(const std::string& recipient, const std::string& verificationCode) {
+    Py_Initialize();  // Initialize the Python interpreter
+
+    // Build the name of the Python module
+    PyObject* pName = PyUnicode_DecodeFSDefault("email_sender");  // Ensure this matches the name of your .py file without the extension
+    PyObject* pModule = PyImport_Import(pName);
+    Py_XDECREF(pName);  // Clean up name reference
+
+    if (pModule != nullptr) {
+        // Get the send_email function from the module
+        PyObject* pFunc = PyObject_GetAttrString(pModule, "send_email");
+
+        if (pFunc && PyCallable_Check(pFunc)) {
+            // Prepare the arguments for the function call
+            PyObject* pArgs = PyTuple_Pack(2,
+                PyUnicode_FromString(recipient.c_str()),
+                PyUnicode_FromString(verificationCode.c_str()));
+
+            if (pArgs != nullptr) {  // Check if arguments were created successfully
+                // Call the function
+                PyObject* pValue = PyObject_CallObject(pFunc, pArgs);
+                Py_XDECREF(pArgs);  // Clean up arguments
+
+                if (pValue != nullptr) {
+                    Py_XDECREF(pValue);  // Clean up return value if needed
+                }
+                else {
+                    PyErr_Print();  // Print any error that occurred in the Python function
+                }
+            }
+            else {
+                // Handle error when packing arguments fails
+                std::cerr << "Error packing arguments for the Python function." << std::endl;
+            }
+        }
+        else {
+            // Print error if function is not found or is not callable
+            if (pFunc == nullptr) {
+                std::cerr << "Function send_email not found in module." << std::endl;
+            }
+            else {
+                std::cerr << "send_email is not callable." << std::endl;
+            }
+            PyErr_Print();  // Print any error that occurred while getting the function
+        }
+
+        Py_XDECREF(pFunc);  // Clean up function reference
+        Py_XDECREF(pModule);  // Clean up module reference
+    }
+    else {
+        // Print error if the module is not found
+        std::cerr << "Failed to load the email_sender module." << std::endl;
+        PyErr_Print();  // Print any error that occurred while importing the module
+    }
+
+    Py_Finalize();  // Finalize the Python interpreter
+}
+
+
 void handleInput(sf::Event event) {
     if (isLoginActive) {
+        // Check if we are in the email input phase
         if (event.type == sf::Event::TextEntered && emailInputActive) {
             if (event.text.unicode < 128) { // ASCII only
-                if (event.text.unicode == '\b' && !emailInput.empty()) {
-                    emailInput.pop_back(); // Backspace handling
+                if (event.text.unicode == '\b') { // Backspace handling
+                    if (!emailInput.empty()) {
+                        emailInput.pop_back();
+                    }
                 }
-                else if (event.text.unicode != '\r') {
+                else if (event.text.unicode != '\r') { // Ignore enter key
                     emailInput += static_cast<char>(event.text.unicode); // Append valid character
                 }
             }
         }
+
+        // Check for mouse button pressed events
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+            // Check if the user clicked on the email input field
             emailInputActive = textBox.getGlobalBounds().contains(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
 
+            // Check if the user clicked the login button
             if (loginButton.getGlobalBounds().contains(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y))) {
                 if (!isVerificationPhase) {
                     // Email submission phase
                     if (emailInput.find("@gmail.com") != std::string::npos ||
                         emailInput.find("@abv.bg") != std::string::npos ||
                         emailInput.find("@outlook.com") != std::string::npos) {
+
                         emailAddress = emailInput;  // Store the email address
                         std::cout << "Email submitted: " << emailInput << std::endl;
 
-                        // Generate and send verification code (In a real app, you would send this via email)
+                        // Generate verification code
                         LogInCode = generateRandomCode(5);  // Generate a random 5-character code
                         std::cout << "Verification code sent to " << emailAddress << ": " << LogInCode << std::endl;
+
+                        // Call the function to send the email
+                        sendEmail(emailAddress, LogInCode);
 
                         // Start the verification timer
                         verificationTimer.restart();
@@ -81,7 +152,7 @@ void handleInput(sf::Event event) {
                         // Update UI for verification phase
                         loginText.setString("VERIFY");
                         emailLabel.setString("Code");
-                        loginButton.setFillColor(sf::Color::Green);  // Indicate transition to verification
+                        loginButton.setFillColor(sf::Color::Green);
                         isCodeExpired = false; // Reset expired flag
                     }
                     else {
