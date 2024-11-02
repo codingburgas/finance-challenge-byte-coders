@@ -4,8 +4,8 @@
 #include <vector>
 #include <sstream>
 
-// Forward declaration of the calculator function
-void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText);
+// Function prototype
+void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText, bool& calculatorOpen, float& totalIncome, float& totalExpense, float& budget);
 
 void ByteCodersEngine::main(const std::string& userEmail) {
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
@@ -80,6 +80,9 @@ void ByteCodersEngine::main(const std::string& userEmail) {
     }
 
     bool calculatorOpen = false; // Flag to track calculator state
+    float totalIncome = 0.0f;
+    float totalExpense = 0.0f;
+    float budget = 0.0f;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -102,7 +105,6 @@ void ByteCodersEngine::main(const std::string& userEmail) {
                 if (buttons[i].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                     if (!isHovered[i]) {
                         buttons[i].setScale(1.2f * buttons[i].getScale().x, 1.2f * buttons[i].getScale().y);
-                        buttons[i].setColor(hoverColor);
                         isHovered[i] = true;
                     }
                 }
@@ -110,7 +112,6 @@ void ByteCodersEngine::main(const std::string& userEmail) {
                     if (isHovered[i]) {
                         buttons[i].setScale(static_cast<float>(buttonWidth) / buttonTextures[i].getSize().x,
                             static_cast<float>(buttonHeight) / buttonTextures[i].getSize().y);
-                        buttons[i].setColor(sf::Color::White);
                         isHovered[i] = false;
                     }
                 }
@@ -127,16 +128,21 @@ void ByteCodersEngine::main(const std::string& userEmail) {
             }
         }
         else {
-            openCalculatorWindow(window, backgroundSprite, emailText); // Pass email text to calculator function
+            openCalculatorWindow(window, backgroundSprite, emailText, calculatorOpen, totalIncome, totalExpense, budget);
         }
 
         window.display();
     }
 }
 
-float calculateExpression(const std::string& expression);
+float calculateExpression(const std::string& expression) {
+    std::istringstream iss(expression);
+    float result;
+    iss >> result; // Simple conversion, needs actual expression parsing
+    return result;
+}
 
-void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText) {
+void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText, bool& calculatorOpen, float& totalIncome, float& totalExpense, float& budget) {
     // Load font for button text
     sf::Font font;
     if (!font.loadFromFile("content/fonts/SourceSansPro-Semibold.otf")) {
@@ -156,7 +162,6 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
     displayText.setPosition(15, 25);
 
     std::string currentExpression;
-    float totalIncome = 0, totalExpense = 0;
 
     // Income, Expense, and Budget text
     sf::Text incomeText, expenseText, budgetText;
@@ -190,79 +195,70 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
         return;
     }
     sf::Sprite backButton(backButtonTexture);
-    backButton.setPosition(window.getSize().x - 70, 10); // Position the back button with appropriate size
+    backButton.setPosition(window.getSize().x - 80, 10); // Position the back button
 
-    // Resize the back button to make it smaller
-    backButton.setScale(0.3f, 0.3f); // Adjust scale as needed
-
-    // Create buttons
-    for (int i = 0; i < buttonLabels.size(); ++i) {
+    for (size_t i = 0; i < buttonLabels.size(); ++i) {
         sf::Text button;
         button.setFont(font);
-        button.setString(buttonLabels[i]);
-        button.setCharacterSize(30);
+        button.setCharacterSize(24);
         button.setFillColor(sf::Color::White);
+        button.setString(std::string(1, buttonLabels[i]));
         button.setPosition(xStart + (i % 4) * (buttonSize + padding), yStart + (i / 4) * (buttonSize + padding));
         buttons.push_back(button);
     }
 
-    // Main loop for calculator
-    while (true) {
+    while (calculatorOpen) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
+                calculatorOpen = false;
                 window.close();
-
+            }
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-
                 if (backButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
-                    return; // Close the calculator when back button is clicked
+                    calculatorOpen = false; // Close the calculator
                 }
 
-                // Handle button clicks
-                for (const auto& button : buttons) {
-                    if (button.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
-                        char label = button.getString()[0];
-                        if (label == '=') {
-                            float result = calculateExpression(currentExpression);
-                            currentExpression = std::to_string(result);
+                for (size_t i = 0; i < buttons.size(); ++i) {
+                    if (buttons[i].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                        char pressedChar = buttonLabels[i];
+                        if (pressedChar == '=') {
+                            totalIncome = calculateExpression(currentExpression); // Here you would implement a proper expression evaluation
+                            incomeText.setString("Total Income: " + std::to_string(totalIncome));
+                            currentExpression.clear(); // Clear expression after calculation
                         }
-                        else if (label == 'D') {
-                            currentExpression.clear();
+                        else if (pressedChar == 'D') {
+                            currentExpression.clear(); // Clear the current expression
                         }
-                        else if (label == 'I') {
-                            totalIncome += std::stof(currentExpression);
-                            currentExpression.clear();
+                        else if (pressedChar == 'I') {
+                            totalIncome += calculateExpression(currentExpression);
+                            incomeText.setString("Total Income: " + std::to_string(totalIncome));
+                            currentExpression.clear(); // Clear expression after adding
                         }
-                        else if (label == 'E') {
-                            totalExpense += std::stof(currentExpression);
-                            currentExpression.clear();
+                        else if (pressedChar == 'E') {
+                            totalExpense += calculateExpression(currentExpression);
+                            expenseText.setString("Total Expense: " + std::to_string(totalExpense));
+                            currentExpression.clear(); // Clear expression after adding
                         }
                         else {
-                            currentExpression += label;
+                            currentExpression += pressedChar; // Add the pressed character to the expression
                         }
-                        break;
+                        displayText.setString(currentExpression);
                     }
                 }
             }
         }
 
-        // Update display text and income/expense/budget text
-        displayText.setString(currentExpression);
-        incomeText.setString("Total Income: " + std::to_string(totalIncome));
-        expenseText.setString("Total Expense: " + std::to_string(totalExpense));
-        budgetText.setString("Budget: " + std::to_string(totalIncome - totalExpense));
-
         window.clear();
         window.draw(backgroundSprite);
-        window.draw(emailText); // Render email text on top of the calculator
+        window.draw(emailText);
         window.draw(display);
         window.draw(displayText);
         window.draw(incomeText);
         window.draw(expenseText);
         window.draw(budgetText);
-        window.draw(backButton); // Draw the back button
+        window.draw(backButton);
 
         for (const auto& button : buttons) {
             window.draw(button);
@@ -270,9 +266,4 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
 
         window.display();
     }
-}
-
-float calculateExpression(const std::string& expression) {
-    // Your expression calculation logic here
-    return 0.0f; // Placeholder
 }
