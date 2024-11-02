@@ -222,7 +222,7 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
     expenseText.setPosition(20, 140);
     budgetText.setPosition(20, 180);
 
-    // Initialize button properties
+    // Initialize button properties for calculator
     std::vector<std::string> buttonLabels = { "7", "8", "9", "/", "C",
                                                "4", "5", "6", "*", "=",
                                                "1", "2", "3", "-", "0",
@@ -237,14 +237,14 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
     for (int i = 0; i < buttonLabels.size(); ++i) {
         sf::RectangleShape button(sf::Vector2f(buttonWidth, buttonHeight));
         button.setPosition(
-            window.getSize().x / 2 - (buttonWidth * 2 + buttonSpacing) + (i % 5) * (buttonWidth + buttonSpacing)-50,
+            window.getSize().x / 2 - (buttonWidth * 2 + buttonSpacing) + (i % 5) * (buttonWidth + buttonSpacing) - 50,
             400 + (i / 5) * (buttonHeight + buttonSpacing)
         );
         button.setFillColor(sf::Color(50, 50, 50)); // Set a background color for buttons
         buttons.push_back(button);
     }
 
-    // Create button text objects
+    // Create button text objects for calculator buttons
     std::vector<sf::Text> buttonTexts;
     for (const auto& label : buttonLabels) {
         sf::Text buttonText;
@@ -255,13 +255,28 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
         buttonTexts.push_back(buttonText);
     }
 
-    // Position button texts
+    // Position button texts for calculator buttons
     for (size_t i = 0; i < buttonTexts.size(); ++i) {
         buttonTexts[i].setPosition(
             buttons[i].getPosition().x + (buttonWidth / 2) - (buttonTexts[i].getGlobalBounds().width / 2),
             buttons[i].getPosition().y + (buttonHeight / 2) - (buttonTexts[i].getGlobalBounds().height / 2)
         );
     }
+
+    // Create back button
+    sf::RectangleShape backButton(sf::Vector2f(100, 50));
+    backButton.setFillColor(sf::Color(200, 10, 10)); // Set a background color for back button
+    backButton.setPosition(window.getSize().x - 110, 150); // Position in the upper right corner with some margin
+
+    sf::Text backButtonText;
+    backButtonText.setFont(font);
+    backButtonText.setString("Back");
+    backButtonText.setCharacterSize(24);
+    backButtonText.setFillColor(sf::Color::White);
+    backButtonText.setPosition(
+        backButton.getPosition().x + (backButton.getSize().x / 2) - (backButtonText.getGlobalBounds().width / 2),
+        backButton.getPosition().y + (backButton.getSize().y / 2) - (backButtonText.getGlobalBounds().height / 2)
+    );
 
     while (calculatorOpen) {
         sf::Event event;
@@ -311,7 +326,37 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
                         }
                     }
                 }
+
+                // Check if back button is pressed
+                if (backButton.getGlobalBounds().contains(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y))) {
+                    calculatorOpen = false; // Close the calculator and return to the main menu
+                }
             }
+        }
+
+        // Get the current mouse position
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+        // Hover effect for calculator buttons
+        for (size_t i = 0; i < buttons.size(); ++i) {
+            if (buttons[i].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                buttons[i].setSize(sf::Vector2f(buttonWidth * 1.1f, buttonHeight * 1.1f)); // Increase size
+                buttons[i].setFillColor(sf::Color(70, 70, 70)); // Darker color
+            }
+            else {
+                buttons[i].setSize(sf::Vector2f(buttonWidth, buttonHeight)); // Reset to original size
+                buttons[i].setFillColor(sf::Color(50, 50, 50)); // Reset to original color
+            }
+        }
+
+        // Hover effect for back button
+        if (backButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+            backButton.setSize(sf::Vector2f(110, 60)); // Increase size
+            backButton.setFillColor(sf::Color(105, 0, 0)); // Darker color
+        }
+        else {
+            backButton.setSize(sf::Vector2f(100, 50)); // Reset to original size
+            backButton.setFillColor(sf::Color(255, 50, 50)); // Reset to original color
         }
 
         // Update the display text and other texts
@@ -329,13 +374,17 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
         window.draw(expenseText);
         window.draw(budgetText);
 
-        // Draw buttons and their text
+        // Draw calculator buttons and their text
         for (size_t i = 0; i < buttons.size(); ++i) {
             window.draw(buttons[i]);
             window.draw(buttonTexts[i]);
         }
 
+        // Draw the back button and its text
+        window.draw(backButton);
+        window.draw(backButtonText);
+
+        // Display the contents of the window
         window.display();
     }
 }
-
