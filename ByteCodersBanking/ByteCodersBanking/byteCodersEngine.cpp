@@ -8,7 +8,7 @@ void ByteCodersEngine::main(const std::string& userEmail) { // Accept email as a
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = static_cast<unsigned int>(desktopMode.width * 0.6);
     unsigned int windowHeight = static_cast<unsigned int>(desktopMode.height * 0.6);
-
+    std::cout << userEmail;
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "ByteCoders Engine");
 
     // Load background
