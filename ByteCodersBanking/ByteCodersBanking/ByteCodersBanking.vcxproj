@@ -142,7 +142,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="loadingandlogin.cpp" />
     <ClCompile Include="verify.cpp" />
-    <ClCompile Include="ProgramMenu.cpp" />
+    <ClCompile Include="byteCodersEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="loading.h" />

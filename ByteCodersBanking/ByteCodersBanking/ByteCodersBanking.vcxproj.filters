@@ -24,7 +24,7 @@
     <ClCompile Include="verify.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ProgramMenu.cpp">
+    <ClCompile Include="byteCodersEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

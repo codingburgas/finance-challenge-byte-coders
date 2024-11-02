@@ -7,6 +7,7 @@
 #include <string>
 #include <cctype> // For std::isalnum
 #include "Python/Python.h"
+using namespace std;
 
 // UI elements and state variables
 sf::RectangleShape textBox;
@@ -45,63 +46,52 @@ std::string generateRandomCode(int length) {
     return code;
 }
 
-// Function to send email using embedded Python
-void sendEmail(const std::string& recipient, const std::string& verificationCode) {
-    Py_Initialize();  // Initialize the Python interpreter
-
-    // Build the name of the Python module
-    PyObject* pName = PyUnicode_DecodeFSDefault("email_sender");  // Ensure this matches the name of your .py file without the extension
+void sendEmail(const string& recipient, const string& verificationCode) {
+    Py_Initialize();
+    // Load the module containing your 'send_email' function
+    PyObject* pName = PyUnicode_DecodeFSDefault("email_sender"); // Replace "your_python_file_name" with the actual filename
     PyObject* pModule = PyImport_Import(pName);
-    Py_XDECREF(pName);  // Clean up name reference
-
+    Py_XDECREF(pName);
     if (pModule != nullptr) {
-        // Get the send_email function from the module
+        // Get the 'send_email' function
         PyObject* pFunc = PyObject_GetAttrString(pModule, "send_email");
-
         if (pFunc && PyCallable_Check(pFunc)) {
-            // Prepare the arguments for the function call
             PyObject* pArgs = PyTuple_Pack(2,
                 PyUnicode_FromString(recipient.c_str()),
                 PyUnicode_FromString(verificationCode.c_str()));
-
-            if (pArgs != nullptr) {  // Check if arguments were created successfully
-                // Call the function
+            if (pArgs != nullptr) {
                 PyObject* pValue = PyObject_CallObject(pFunc, pArgs);
-                Py_XDECREF(pArgs);  // Clean up arguments
-
+                Py_XDECREF(pArgs);
                 if (pValue != nullptr) {
-                    Py_XDECREF(pValue);  // Clean up return value if needed
+                    Py_XDECREF(pValue);
+                    cout << "Email sent successfully!" << endl;
                 }
                 else {
-                    PyErr_Print();  // Print any error that occurred in the Python function
+                    PyErr_Print();
+                    cerr << "Error sending email." << endl;
                 }
             }
             else {
-                // Handle error when packing arguments fails
-                std::cerr << "Error packing arguments for the Python function." << std::endl;
+                cerr << "Error packing arguments for the Python function." << endl;
             }
         }
         else {
-            // Print error if function is not found or is not callable
             if (pFunc == nullptr) {
-                std::cerr << "Function send_email not found in module." << std::endl;
+                cerr << "Function send_email not found in module." << endl;
             }
             else {
-                std::cerr << "send_email is not callable." << std::endl;
+                cerr << "send_email is not callable." << endl;
             }
-            PyErr_Print();  // Print any error that occurred while getting the function
+            PyErr_Print();
         }
-
-        Py_XDECREF(pFunc);  // Clean up function reference
-        Py_XDECREF(pModule);  // Clean up module reference
+        Py_XDECREF(pFunc);
+        Py_XDECREF(pModule);
     }
     else {
-        // Print error if the module is not found
-        std::cerr << "Failed to load the email_sender module." << std::endl;
-        PyErr_Print();  // Print any error that occurred while importing the module
+        cerr << "Failed to load the module." << endl;
+        PyErr_Print();
     }
-
-    Py_Finalize();  // Finalize the Python interpreter
+    Py_Finalize();
 }
 
 
@@ -143,6 +133,7 @@ void handleInput(sf::Event event) {
 
                         // Call the function to send the email
                         sendEmail(emailAddress, LogInCode);
+
 
                         // Start the verification timer
                         verificationTimer.restart();
