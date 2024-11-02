@@ -252,20 +252,19 @@ void loadAndResize() {
     // Font loading
     if (!font.loadFromFile("content/fonts/SourceSansPro-Bold.otf")) return;
 
-    // Warning message setup
+    // Setup UI elements
     warningText.setString("Please ensure you enter the correct details for safe login.");
     warningText.setFont(font);
     warningText.setCharacterSize(20);
     warningText.setFillColor(sf::Color::Red);
+    warningText.setPosition(windowWidth / 2 - warningText.getGlobalBounds().width / 2, windowHeight - 50);
 
-    // Login text setup
     loginText.setString("LOG IN");
     loginText.setFont(font);
     loginText.setCharacterSize(50);
     loginText.setFillColor(sf::Color::White);
-    loginText.setPosition(windowWidth / 2 - loginText.getGlobalBounds().width / 2, 50);
+    loginText.setPosition(windowWidth / 2 - loginText.getGlobalBounds().width / 2, 20);  // Adjusted position for visibility
 
-    // UI element properties
     // Email text box
     emailTextBox.setSize(sf::Vector2f(300, 50));
     emailTextBox.setFillColor(sf::Color::White);
@@ -286,12 +285,14 @@ void loadAndResize() {
     emailLabel.setFillColor(sf::Color::White);
     emailLabel.setPosition(windowWidth / 2 - emailLabel.getGlobalBounds().width / 2, emailTextBox.getPosition().y - 40);
 
-    warningText.setPosition(windowWidth / 2 - warningText.getGlobalBounds().width / 2, loginButton.getPosition().y + loginButton.getSize().y + 10);
-
     loaded = true;
     isLoginActive = true;
 
-    // Main event loop
+    // Define colors for text box states
+    const sf::Color TEXT_BOX_IDLE_COLOR = sf::Color::White;
+    const sf::Color TEXT_BOX_ACTIVE_COLOR = sf::Color(100, 100, 100); // Darker color for active state
+
+    // In the main event loop, adjust the drawing of text boxes based on their active states
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -308,22 +309,28 @@ void loadAndResize() {
 
         // Draw the appropriate input box based on the current state
         if (!isVerificationPhase) {
+            // Set the color based on whether the email input is active
+            emailTextBox.setFillColor(emailInputActive ? TEXT_BOX_ACTIVE_COLOR : TEXT_BOX_IDLE_COLOR);
             window.draw(emailTextBox); // Draw the email text box
             emailLabel.setString("Email");
             window.draw(emailLabel);
             // Draw the email input text
             sf::Text inputText(emailInput, font, 30);
-            inputText.setFillColor(sf::Color::Black);
+            inputText.setFillColor(emailInputActive ? sf::Color::White : sf::Color::Black);
             inputText.setPosition(emailTextBox.getPosition().x + 10, emailTextBox.getPosition().y + 10);
             window.draw(inputText);
+            // Draw warning text
+            window.draw(warningText);
         }
         else {
+            // Set the color based on whether the code input is active
+            codeTextBox.setFillColor(codeInputActive ? TEXT_BOX_ACTIVE_COLOR : TEXT_BOX_IDLE_COLOR);
             window.draw(codeTextBox); // Draw the code text box
             emailLabel.setString("Code");
             window.draw(emailLabel);
             // Draw the code input text
             sf::Text codeInputText(codeInput, font, 30);
-            codeInputText.setFillColor(sf::Color::Black);
+            codeInputText.setFillColor(codeInputActive ? sf::Color::White : sf::Color::Black);
             codeInputText.setPosition(codeTextBox.getPosition().x + 10, codeTextBox.getPosition().y + 10);
             window.draw(codeInputText);
         }
@@ -356,7 +363,10 @@ void loadAndResize() {
             loginButton.setFillColor(sf::Color::Blue);  // Reset button color
         }
 
+        // Draw the LOG IN text at the top
+        window.draw(loginText);
+
         window.display();
     }
-}
 
+}
