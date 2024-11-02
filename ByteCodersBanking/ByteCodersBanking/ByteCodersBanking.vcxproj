@@ -145,7 +145,7 @@
     <ClCompile Include="byteCodersEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="loading.h" />
+    <ClInclude Include="byteCodersEngine.h" />
     <ClInclude Include="verify.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

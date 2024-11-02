@@ -6,6 +6,7 @@
 #include <ctime> // For time functions
 #include <string>
 #include <cctype> // For std::isalnum
+#include "byteCodersEngine.h"
 #include "Python/Python.h"
 using namespace std;
 
@@ -21,7 +22,6 @@ bool emailInputActive = false;
 
 // Login process variables
 unsigned int windowWidth, windowHeight;
-std::string UserID;
 std::string LogInCode;
 std::string enteredCode;  // To hold the user-entered code in verification phase
 std::string emailAddress; // To store the email after initial submission
@@ -30,13 +30,19 @@ bool isLoginActive = false;
 bool isVerificationPhase = false;  // Flag to track login vs verification phase
 sf::Clock verificationTimer;  // Timer for code expiration
 bool isCodeExpired = false;    // Flag to check if code is expired
+std::string User; // To store the user's email address permanently
+
 
 sf::Clock buttonTimer;
 bool isButtonPressed = false;
 const float BUTTON_COLOR_CHANGE_DURATION = 0.5f;
+bool verificationSuccess = false;
 
 // Function to generate a random alphanumeric code
 std::string generateRandomCode(int length) {
+    // Seed the random number generator once at the beginning
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
     const char alphanum[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     std::string code;
 
@@ -97,26 +103,22 @@ void sendEmail(const string& recipient, const string& verificationCode) {
 
 void handleInput(sf::Event event) {
     if (isLoginActive) {
-        // Check if we are in the email input phase
         if (event.type == sf::Event::TextEntered && emailInputActive) {
-            if (event.text.unicode < 128) { // ASCII only
-                if (event.text.unicode == '\b') { // Backspace handling
+            if (event.text.unicode < 128) {
+                if (event.text.unicode == '\b') {
                     if (!emailInput.empty()) {
                         emailInput.pop_back();
                     }
                 }
-                else if (event.text.unicode != '\r') { // Ignore enter key
-                    emailInput += static_cast<char>(event.text.unicode); // Append valid character
+                else if (event.text.unicode != '\r') {
+                    emailInput += static_cast<char>(event.text.unicode);
                 }
             }
         }
 
-        // Check for mouse button pressed events
         if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-            // Check if the user clicked on the email input field
             emailInputActive = textBox.getGlobalBounds().contains(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
 
-            // Check if the user clicked the login button
             if (loginButton.getGlobalBounds().contains(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y))) {
                 if (!isVerificationPhase) {
                     // Email submission phase
@@ -124,16 +126,15 @@ void handleInput(sf::Event event) {
                         emailInput.find("@abv.bg") != std::string::npos ||
                         emailInput.find("@outlook.com") != std::string::npos) {
 
-                        emailAddress = emailInput;  // Store the email address
-                        std::cout << "Email submitted: " << emailInput << std::endl;
+                        User = emailInput;  // Correctly store the user's email address in User
+                        std::cout << "Email submitted: " << User << std::endl;
 
                         // Generate verification code
                         LogInCode = generateRandomCode(5);  // Generate a random 5-character code
-                        std::cout << "Verification code sent to " << emailAddress << ": " << LogInCode << std::endl;
+                        std::cout << "Verification code sent to " << User << ": " << LogInCode << std::endl;
 
                         // Call the function to send the email
-                        sendEmail(emailAddress, LogInCode);
-
+                        sendEmail(User, LogInCode);
 
                         // Start the verification timer
                         verificationTimer.restart();
@@ -147,7 +148,7 @@ void handleInput(sf::Event event) {
                         isCodeExpired = false; // Reset expired flag
                     }
                     else {
-                        // Invalid email, turn the login button red
+                        // Invalid email case
                         loginButton.setFillColor(sf::Color::Red);
                         isButtonPressed = true;
                         buttonTimer.restart();
@@ -155,13 +156,18 @@ void handleInput(sf::Event event) {
                 }
                 else {
                     // Verification phase
-                    if (emailInput == LogInCode) {
+                    if (emailInput == LogInCode) { // Check entered code against the generated code
                         std::cout << "Verification successful!" << std::endl;
                         loginButton.setFillColor(sf::Color::Green);
-                        // Transition to the next stage, if applicable
+                
+
+                        // Pass the user's email to the ByteCodersEngine
+                        ByteCodersEngine byteCodersEngine;
+                        byteCodersEngine.main(User); // Pass the User email as a parameter
                     }
                     else {
-                        loginButton.setFillColor(sf::Color::Red);  // Incorrect code
+                        // Incorrect code handling
+                        loginButton.setFillColor(sf::Color::Red);
                         isButtonPressed = true;
                         buttonTimer.restart();
                         std::cout << "Incorrect verification code entered!" << std::endl;
@@ -177,12 +183,21 @@ void loadAndResize() {
     // Initial window setup
     sf::RenderWindow window(sf::VideoMode(400, 200), "Banking App", sf::Style::None);
     sf::Clock clock;
-
+    // Close window if verification is successful
+    
     // Display initial black screen for 5 seconds
     while (window.isOpen() && clock.getElapsedTime().asSeconds() < 5) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) window.close();
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return;  // Exit the function
+            }
+        }
+        // Close window if verification is successful
+        if (verificationSuccess) {
+            window.close();  // Close this window
+            return;  // Exit the function
         }
         window.clear(sf::Color::Black);
         window.display();
@@ -243,7 +258,10 @@ void loadAndResize() {
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) window.close();
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                return; // Exit the function after closing the window
+            }
             handleInput(event);
         }
 
@@ -264,6 +282,19 @@ void loadAndResize() {
             emailLabel.setString("Email");
             loginText.setString("LOG IN");
             loginButton.setFillColor(sf::Color::Blue);  // Reset button color
+        }
+
+        // Handle login verification
+        if (isVerificationPhase && emailInput == LogInCode) {
+            std::cout << "Verification successful!" << std::endl;
+            loginButton.setFillColor(sf::Color::Green);
+            window.close();  // Close the current window
+
+            // Pass the user's email to the ByteCodersEngine
+            ByteCodersEngine byteCodersEngine; // Create an instance of ByteCodersEngine
+            byteCodersEngine.main(emailInput); // Pass the email input as a parameter
+
+            return;  // Ensure we exit the function to stop processing this window
         }
 
         // Text box color when active
