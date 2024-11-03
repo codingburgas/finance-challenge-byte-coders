@@ -1,7 +1,7 @@
 <h1 align="center">Byte Coders</h1>
 
 <p align = "center">
-  <img src="![image](https://github.com/user-attachments/assets/f9a2b0dc-2a62-46dc-b2f3-59d3de0a2079)
+  <img src="https://static.wixstatic.com/media/82d267_2b7ef74c0db74ed49a824f728526e121~mv2.png/v1/fill/w_200,h_73,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/byte-coders-high-resolution-logo-transparent.png
 " alt="Byte Coders"/>
 </p>
 
@@ -16,7 +16,7 @@
 ## 🚀 Languages 
   <p align="left"> 
   <a href="https://www.cplusplus.com/"><img src="https://img.icons8.com/color/48/000000/c-plus-plus-logo.png" alt="C++"/></a>
-  <a href="https://www.cplusplus.com/"><img src="https://ojt.com/wp-content/uploads/2021/08/python-programming-language.png" alt="Python"/></a>
+  <a href="https://www.cplusplus.com/"><img src="https://ojt.com/wp-content/uploads/2021/08/python-programming-language.png"width=48px height=48px alt="Python"/></a>
  
   </p>
 
