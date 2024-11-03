@@ -1,5 +1,5 @@
 Email: 752.gamer.master@gmail.com
-Income: 9000
-Expense: 3222
-Budget: 5778
+Income: 300
+Expense: 158
+Budget: 142
 Your budget is high.

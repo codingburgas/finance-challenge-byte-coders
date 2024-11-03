@@ -1,21 +1,21 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\",
+  "WorkspaceRootPath": "F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\loadingandlogin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\loadingandlogin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|solutionrelative:ByteCodersBanking\\loadingandlogin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|solutionrelative:ByteCodersBanking\\byteCodersEngine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|solutionrelative:ByteCodersBanking\\byteCodersEngine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|solutionrelative:ByteCodersBanking\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -32,9 +32,9 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "byteCodersEngine.h",
-              "DocumentMoniker": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.h",
+              "DocumentMoniker": "F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.h",
               "RelativeDocumentMoniker": "ByteCodersBanking\\byteCodersEngine.h",
-              "ToolTip": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.h",
+              "ToolTip": "F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.h",
               "RelativeToolTip": "ByteCodersBanking\\byteCodersEngine.h",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAABTAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
@@ -44,22 +44,21 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "byteCodersEngine.cpp",
-              "DocumentMoniker": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.cpp",
+              "DocumentMoniker": "F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.cpp",
               "RelativeDocumentMoniker": "ByteCodersBanking\\byteCodersEngine.cpp",
-              "ToolTip": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.cpp",
+              "ToolTip": "F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.cpp",
               "RelativeToolTip": "ByteCodersBanking\\byteCodersEngine.cpp",
               "ViewState": "AQIAAHkAAAAAAAAAAAAAAI0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-02T15:14:29.549Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-02T15:14:29.549Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "loadingandlogin.cpp",
-              "DocumentMoniker": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\loadingandlogin.cpp",
+              "DocumentMoniker": "F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\loadingandlogin.cpp",
               "RelativeDocumentMoniker": "ByteCodersBanking\\loadingandlogin.cpp",
-              "ToolTip": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\loadingandlogin.cpp",
+              "ToolTip": "F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\loadingandlogin.cpp",
               "RelativeToolTip": "ByteCodersBanking\\loadingandlogin.cpp",
               "ViewState": "AQIAAF4BAAAAAAAAAAAQwHcBAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
@@ -70,9 +69,9 @@
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "main.cpp",
-              "DocumentMoniker": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\main.cpp",
+              "DocumentMoniker": "F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\main.cpp",
               "RelativeDocumentMoniker": "ByteCodersBanking\\main.cpp",
-              "ToolTip": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\main.cpp",
+              "ToolTip": "F:\\752\\CodingStuff\\finance-challenge-byte-coders\\ByteCodersBanking\\ByteCodersBanking\\main.cpp",
               "RelativeToolTip": "ByteCodersBanking\\main.cpp",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",

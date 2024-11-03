@@ -1,8 +1,49 @@
-﻿  loadingandlogin.cpp
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\loadingandlogin.cpp(272,101): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+﻿  main.cpp
+  loadingandlogin.cpp
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\loadingandlogin.cpp(272,101): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+  byteCodersEngine.cpp
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(358,30): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(357,63): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(617,48): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(617,48): warning C4244:         with
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(617,48): warning C4244:         [
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(617,48): warning C4244:             T=unsigned int
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(617,48): warning C4244:         ]
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(655,61): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(655,61): warning C4244:         with
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(655,61): warning C4244:         [
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(655,61): warning C4244:             T=float
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(655,61): warning C4244:         ]
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(655,48): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(655,48): warning C4244:         with
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(655,48): warning C4244:         [
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(655,48): warning C4244:             T=float
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(655,48): warning C4244:         ]
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(658,17): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(657,114): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(657,114): warning C4244:         with
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(657,114): warning C4244:         [
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(657,114): warning C4244:             T=unsigned int
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(657,114): warning C4244:         ]
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(686,47): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(686,47): warning C4244:         with
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(686,47): warning C4244:         [
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(686,47): warning C4244:             T=unsigned int
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(686,47): warning C4244:         ]
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(764,62): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(764,62): warning C4244:         with
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(764,62): warning C4244:         [
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(764,62): warning C4244:             T=float
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(764,62): warning C4244:         ]
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(764,49): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(764,49): warning C4244:         with
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(764,49): warning C4244:         [
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(764,49): warning C4244:             T=float
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(764,49): warning C4244:         ]
+F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(719,66): warning C4101: 'e': unreferenced local variable
   Generating code
-  1 of 782 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+  760 of 782 functions (97.2%) were compiled, the rest were copied from previous compilation.
+    26 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  ByteCodersBanking.vcxproj -> F:\752\CodingStuff\ByteCoders\ByteCodersBanking\x64\Release\ByteCodersBanking.exe
+  ByteCodersBanking.vcxproj -> F:\752\CodingStuff\finance-challenge-byte-coders\ByteCodersBanking\x64\Release\ByteCodersBanking.exe
