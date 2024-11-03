@@ -1,3 +1,5 @@
+// WELCOME RO byteCodersEngine.cpp ! Why Engine you might ask, well the person writing the code apperantly drained his ideas on something else than the name so here you have it!
+
 #include "byteCodersEngine.h"
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -11,12 +13,247 @@
 #include <stack>
 #include <cctype>
 #include <stdexcept>
-#include "Python/Python.h"
-#include <filesystem>
+
 
 void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText, bool& calculatorOpen, float& totalIncome, float& totalExpense, float& budget);
 
 void openSaveStatisticsWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText, bool& saveStatisticsOpen, float totalIncome, float totalExpense, float budget);
+
+void displayAccountInfo(sf::RenderWindow& window, const sf::Font& font, const std::string& userEmail) {
+    std::string fileName = "userData/" + userEmail + "_stats.txt";  // Construct the filename
+    std::ifstream inputFile(fileName);
+
+    // Default values
+    float totalIncome = -1.0f; // Indicates no data
+    float totalExpense = -1.0f; // Indicates no data
+    float totalBudget = -1.0f; // Indicates no data
+
+    if (!inputFile.is_open()) {
+        std::cerr << "Failed to open the account file: " << fileName << std::endl;
+    }
+    else {
+        std::string line;
+
+        // Read income, expense, and budget from the file
+        while (std::getline(inputFile, line)) {
+            std::istringstream ss(line);
+            std::string label;
+            float value;
+
+            if (ss >> label >> value) {
+                if (label == "Income:") {
+                    totalIncome = value;
+                }
+                else if (label == "Expense:") {
+                    totalExpense = value;
+                }
+                else if (label == "Budget:") {
+                    totalBudget = value;
+                }
+            }
+        }
+        inputFile.close();
+    }
+
+    // Create text to display the information
+    sf::Text incomeText, expenseText, budgetText;
+    incomeText.setFont(font);
+    expenseText.setFont(font);
+    budgetText.setFont(font);
+
+    // Set the strings based on the values read
+    incomeText.setString("Income: " + (totalIncome >= 0 ? std::to_string(totalIncome) : "NoData"));
+    expenseText.setString("Expense: " + (totalExpense >= 0 ? std::to_string(totalExpense) : "NoData"));
+    budgetText.setString("Budget: " + (totalBudget >= 0 ? std::to_string(totalBudget) : "NoData"));
+
+    // Set color for each text
+    incomeText.setFillColor(sf::Color::Green);
+    expenseText.setFillColor(sf::Color::Red);
+    budgetText.setFillColor(sf::Color::White);
+
+    // Position the text
+    incomeText.setPosition(50, 100);
+    expenseText.setPosition(50, 150);
+    budgetText.setPosition(50, 200);
+
+    // Display the account information
+    while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+
+        window.clear();
+        window.draw(incomeText);
+        window.draw(expenseText);
+        window.draw(budgetText);
+        window.display();
+    }
+}
+
+void openAccountWindow(sf::RenderWindow& window, const std::string& userEmail, bool& accountOpen, float& myIncome, float& myExpense, float& myBudget) {
+    sf::Font font;
+    if (!font.loadFromFile("content/fonts/SourceSansPro-Semibold.otf")) {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
+
+    // Load background texture and create sprite
+    sf::Texture backgroundTexture;
+    if (!backgroundTexture.loadFromFile("content/images/Page.png")) { // Update with your image path
+        std::cerr << "Failed to load background image!" << std::endl;
+        return;
+    }
+    sf::Sprite backgroundSprite(backgroundTexture);
+    backgroundSprite.setScale(window.getSize().x / backgroundSprite.getGlobalBounds().width,
+        window.getSize().y / backgroundSprite.getGlobalBounds().height); // Scale to fit the window
+
+    // Title for Account Information
+    sf::Text titleText("ACCOUNT INFORMATION", font, 30);
+    titleText.setFillColor(sf::Color::White);
+    titleText.setPosition(window.getSize().x / 2 - titleText.getGlobalBounds().width / 2, 50);
+
+    // Back button
+    sf::RectangleShape backButton(sf::Vector2f(150, 50));
+    backButton.setFillColor(sf::Color::Red);
+    backButton.setPosition(window.getSize().x / 2 - backButton.getSize().x / 2, 650);
+
+    // Text on Back button
+    sf::Text backText("Back", font, 24);
+    backText.setFillColor(sf::Color::White);
+    backText.setPosition(
+        backButton.getPosition().x + (backButton.getSize().x - backText.getGlobalBounds().width) / 2,
+        backButton.getPosition().y + (backButton.getSize().y - backText.getGlobalBounds().height) / 2
+    );
+
+    // Button to set local variables from the file
+    sf::RectangleShape setVariablesButton(sf::Vector2f(200, 50));
+    setVariablesButton.setFillColor(sf::Color::Blue);
+    setVariablesButton.setPosition(window.getSize().x / 2 - setVariablesButton.getSize().x / 2, 550);
+
+    // Text on Set Variables button
+    sf::Text setVariablesText("Set Variables", font, 24);
+    setVariablesText.setFillColor(sf::Color::White);
+    setVariablesText.setPosition(
+        setVariablesButton.getPosition().x + (setVariablesButton.getSize().x - setVariablesText.getGlobalBounds().width) / 2,
+        setVariablesButton.getPosition().y + (setVariablesButton.getSize().y - setVariablesText.getGlobalBounds().height) / 2
+    );
+
+    // Create text elements for account info
+    sf::Text incomeText, expenseText, budgetText;
+    incomeText.setFont(font);
+    expenseText.setFont(font);
+    budgetText.setFont(font);
+
+    // Load account information
+    std::string fileName = "userData/" + userEmail + "_stats.txt";  // Construct the filename
+    std::ifstream inputFile(fileName);
+
+    // Default values
+    float totalIncome = -1.0f; // Indicates no data
+    float totalExpense = -1.0f; // Indicates no data
+    float totalBudget = -1.0f; // Indicates no data
+
+    if (!inputFile.is_open()) {
+        std::cerr << "Failed to open the account file: " << fileName << std::endl;
+    }
+    else {
+        std::string line;
+
+        // Read income, expense, and budget from the file
+        while (std::getline(inputFile, line)) {
+            std::istringstream ss(line);
+            std::string label;
+            float value;
+
+            if (ss >> label >> value) {
+                if (label == "Income:") {
+                    totalIncome = value;
+                }
+                else if (label == "Expense:") {
+                    totalExpense = value;
+                }
+                else if (label == "Budget:") {
+                    totalBudget = value;
+                }
+            }
+        }
+        inputFile.close();
+    }
+
+    // Set the strings based on the values read
+    incomeText.setString("Income: " + (totalIncome >= 0 ? std::to_string(totalIncome) : "NoData"));
+    expenseText.setString("Expense: " + (totalExpense >= 0 ? std::to_string(totalExpense) : "NoData"));
+    budgetText.setString("Budget: " + (totalBudget >= 0 ? std::to_string(totalBudget) : "NoData"));
+
+    // Set color for each text
+    incomeText.setFillColor(sf::Color::Green);
+    expenseText.setFillColor(sf::Color::Red);
+    budgetText.setFillColor(sf::Color::White);
+
+    // Center position for the texts
+    incomeText.setPosition(window.getSize().x / 2 - incomeText.getGlobalBounds().width / 2, 300);
+    expenseText.setPosition(window.getSize().x / 2 - expenseText.getGlobalBounds().width / 2, 350);
+    budgetText.setPosition(window.getSize().x / 2 - budgetText.getGlobalBounds().width / 2, 400);
+
+    // Event loop for the account window
+    while (accountOpen) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                accountOpen = false;
+                window.close();
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                if (backButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    accountOpen = false; // Close the account window
+                }
+                if (setVariablesButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    // Set local variables from the text file
+                    myIncome = (totalIncome >= 0) ? totalIncome : 0; // Handle NoData case
+                    myExpense = (totalExpense >= 0) ? totalExpense : 0; // Handle NoData case
+                    myBudget = (totalBudget >= 0) ? totalBudget : 0; // Handle NoData case
+                }
+            }
+
+            // Check for hover effects
+            if (event.type == sf::Event::MouseMoved) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                // Hover effect for back button
+                if (backButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    backButton.setFillColor(sf::Color::Black); // Change to a darker shade
+                }
+                else {
+                    backButton.setFillColor(sf::Color::Red); // Reset to original
+                }
+                // Hover effect for set variables button
+                if (setVariablesButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    setVariablesButton.setFillColor(sf::Color::Magenta); // Change to a lighter shade
+                }
+                else {
+                    setVariablesButton.setFillColor(sf::Color::Blue); // Reset to original
+                }
+            }
+        }
+
+        window.clear();
+        window.draw(backgroundSprite); // Draw background
+        window.draw(titleText);
+        window.draw(incomeText);
+        window.draw(expenseText);
+        window.draw(budgetText);
+        window.draw(backButton);
+        window.draw(backText);
+        window.draw(setVariablesButton); // Draw Set Variables button
+        window.draw(setVariablesText);
+        window.display();
+    }
+}
+
+
 
 void DownloadStats(const std::string& userEmail, double totalIncome, double totalExpense, double totalBudget) {
     // Determine if the budget is low or high
@@ -95,12 +332,12 @@ void ByteCodersEngine::main(const std::string& userEmail) {
     // Set up button textures
     std::vector<sf::Texture> buttonTextures(3); // Now we have 3 buttons
     const std::vector<std::string> buttonTexturePaths = {
-        "content/images/accountButton1.png",  // Button 1
+        "content/images/accountButton1.png",  // Button 1 (Account)
         "content/images/CalculatorButton2.png", // Button 2
         "content/images/SubscrionsButton4.png"  // Button 4
     };
 
-    for (size_t i = 0; i < buttonTextures.size(); ++i) {
+    for (size_t i = 0; i < buttonTextures.size(); i++) {
         if (!buttonTextures[i].loadFromFile(buttonTexturePaths[i])) {
             std::cerr << "Failed to load button texture: " << buttonTexturePaths[i] << std::endl;
             return;
@@ -128,6 +365,7 @@ void ByteCodersEngine::main(const std::string& userEmail) {
 
     bool calculatorOpen = false;        // Flag to track calculator state
     bool saveStatisticsOpen = false;    // Flag to track Save Statistics state
+    bool accountOpen = false;            // Flag to track account state
 
     while (window.isOpen()) {
         sf::Event event;
@@ -140,20 +378,27 @@ void ByteCodersEngine::main(const std::string& userEmail) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
                 // Check each button and open the corresponding screen
+                if (buttons[0].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    accountOpen = true;        // Open Account window
+                    calculatorOpen = false;    // Close Calculator screen if open
+                    saveStatisticsOpen = false; // Close Save Statistics screen if open
+                }
                 if (buttons[1].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                     calculatorOpen = true;      // Open Calculator screen
                     saveStatisticsOpen = false; // Close Save Statistics screen if open
+                    accountOpen = false;        // Close Account window if open
                 }
                 if (buttons[2].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                     saveStatisticsOpen = true;  // Open Save Statistics screen
                     calculatorOpen = false;     // Close Calculator screen if open
+                    accountOpen = false;        // Close Account window if open
                 }
             }
         }
 
         // Update hover effects
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-        for (size_t i = 0; i < buttons.size(); ++i) {
+        for (size_t i = 0; i < buttons.size(); i++) {
             if (buttons[i].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                 if (!isHovered[i]) {
                     buttons[i].setScale(1.1f * static_cast<float>(buttonWidth) / buttonTextures[i].getSize().x,
@@ -176,7 +421,10 @@ void ByteCodersEngine::main(const std::string& userEmail) {
         window.draw(emailText);
 
         // Draw the specific screen if one is open
-        if (calculatorOpen) {
+        if (accountOpen) {
+            openAccountWindow(window, userEmail, accountOpen, totalIncome, totalExpense, budget);
+        }
+        else if (calculatorOpen) {
             openCalculatorWindow(window, backgroundSprite, emailText, calculatorOpen, totalIncome, totalExpense, budget);
         }
         else if (saveStatisticsOpen) {
@@ -193,6 +441,8 @@ void ByteCodersEngine::main(const std::string& userEmail) {
         window.display();
     }
 }
+
+
 
 
 void openSaveStatisticsWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText, bool& saveStatisticsOpen, float totalIncome, float totalExpense, float budget) {
@@ -401,7 +651,7 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
     int buttonSpacing = 10;
 
     // Create buttons for the calculator
-    for (int i = 0; i < buttonLabels.size(); ++i) {
+    for (int i = 0; i < buttonLabels.size(); i++) {
         sf::RectangleShape button(sf::Vector2f(buttonWidth, buttonHeight));
         button.setPosition(
             window.getSize().x / 2 - (buttonWidth * 2 + buttonSpacing) + (i % 5) * (buttonWidth + buttonSpacing) - 50,
@@ -423,7 +673,7 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
     }
 
     // Position button texts for calculator buttons
-    for (size_t i = 0; i < buttonTexts.size(); ++i) {
+    for (size_t i = 0; i < buttonTexts.size(); i++) {
         buttonTexts[i].setPosition(
             buttons[i].getPosition().x + (buttonWidth / 2) - (buttonTexts[i].getGlobalBounds().width / 2),
             buttons[i].getPosition().y + (buttonHeight / 2) - (buttonTexts[i].getGlobalBounds().height / 2)
@@ -505,7 +755,7 @@ void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& background
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
         // Hover effect for calculator buttons
-        for (size_t i = 0; i < buttons.size(); ++i) {
+        for (size_t i = 0; i < buttons.size(); i++) {
             if (buttons[i].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                 buttons[i].setSize(sf::Vector2f(buttonWidth * 1.1f, buttonHeight * 1.1f)); // Increase size
                 buttons[i].setFillColor(sf::Color(70, 70, 70)); // Darker color

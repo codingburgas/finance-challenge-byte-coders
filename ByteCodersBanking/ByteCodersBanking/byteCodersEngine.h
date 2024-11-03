@@ -1,3 +1,7 @@
+//THe mian dev behind this was not able to think while doing this that is why we did end up with this file! Pretty good explanation if you ask me!
+
+//This file contrains the variables needed for the calculator such as Budget etc..!
+
 #ifndef BYTECODERSENGINE_H
 #define BYTECODERSENGINE_H
 

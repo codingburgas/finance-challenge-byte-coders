@@ -1,3 +1,5 @@
+// WELCOME RO loadingandlogin.cpp This random file handles everything related to loading,verification ect! Also it has imbeded python and I would say "NEVER AGAIN"
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>

@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|solutionrelative:ByteCodersBanking\\byteCodersEngine.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\loadingandlogin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|solutionrelative:ByteCodersBanking\\loadingandlogin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|solutionrelative:ByteCodersBanking\\byteCodersEngine.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\loadingandlogin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|solutionrelative:ByteCodersBanking\\loadingandlogin.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C3115A0E-7A1E-4CD4-A5C1-BC886FF8CC27}|ByteCodersBanking\\ByteCodersBanking.vcxproj|F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\Main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -30,15 +30,16 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "byteCodersEngine.h",
               "DocumentMoniker": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.h",
               "RelativeDocumentMoniker": "ByteCodersBanking\\byteCodersEngine.h",
               "ToolTip": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.h",
               "RelativeToolTip": "ByteCodersBanking\\byteCodersEngine.h",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAABTAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-02T15:17:24.608Z"
+              "WhenOpened": "2024-11-02T15:17:24.608Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -48,22 +49,23 @@
               "RelativeDocumentMoniker": "ByteCodersBanking\\byteCodersEngine.cpp",
               "ToolTip": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\byteCodersEngine.cpp",
               "RelativeToolTip": "ByteCodersBanking\\byteCodersEngine.cpp",
-              "ViewState": "AQIAAAUCAAAAAAAAAAAQwCMCAAAJAAAA",
+              "ViewState": "AQIAAJYBAAAAAAAAAAAAALgBAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-02T15:14:29.549Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "loadingandlogin.cpp",
               "DocumentMoniker": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\loadingandlogin.cpp",
               "RelativeDocumentMoniker": "ByteCodersBanking\\loadingandlogin.cpp",
               "ToolTip": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\loadingandlogin.cpp",
               "RelativeToolTip": "ByteCodersBanking\\loadingandlogin.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAEAAAAAAAAA",
+              "ViewState": "AQIAAG4BAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-01T14:59:19.658Z"
+              "WhenOpened": "2024-11-01T14:59:19.658Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -73,9 +75,10 @@
               "RelativeDocumentMoniker": "ByteCodersBanking\\main.cpp",
               "ToolTip": "F:\\752\\CodingStuff\\ByteCoders\\ByteCodersBanking\\ByteCodersBanking\\main.cpp",
               "RelativeToolTip": "ByteCodersBanking\\main.cpp",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAABAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-01T11:14:01.471Z"
+              "WhenOpened": "2024-11-01T11:14:01.471Z",
+              "EditorCaption": ""
             }
           ]
         }
