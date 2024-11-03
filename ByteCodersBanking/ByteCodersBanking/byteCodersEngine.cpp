@@ -133,7 +133,7 @@ void openAccountWindow(sf::RenderWindow& window, const std::string& userEmail, b
     setVariablesButton.setPosition(window.getSize().x / 2 - setVariablesButton.getSize().x / 2, 550);
 
     // Text on Set Variables button
-    sf::Text setVariablesText("Set Variables", font, 24);
+    sf::Text setVariablesText("Load Data", font, 24);
     setVariablesText.setFillColor(sf::Color::White);
     setVariablesText.setPosition(
         setVariablesButton.getPosition().x + (setVariablesButton.getSize().x - setVariablesText.getGlobalBounds().width) / 2,

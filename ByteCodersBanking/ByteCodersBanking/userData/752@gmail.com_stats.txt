@@ -1,0 +1,5 @@
+Email: 752@gmail.com
+Income: 8888
+Expense: 6666
+Budget: 2222
+Your budget is high.
