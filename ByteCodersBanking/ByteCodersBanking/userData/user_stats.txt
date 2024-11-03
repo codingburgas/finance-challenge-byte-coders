@@ -1,0 +1,5 @@
+Email: 752.gamer.master@gmail.com
+Income: 0
+Expense: 0
+Budget: 0
+Your budget is high.

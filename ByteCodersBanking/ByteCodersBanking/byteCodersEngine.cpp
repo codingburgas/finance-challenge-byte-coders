@@ -12,72 +12,43 @@
 #include <cctype>
 #include <stdexcept>
 #include "Python/Python.h"
+#include <filesystem>
 
 void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText, bool& calculatorOpen, float& totalIncome, float& totalExpense, float& budget);
 
 void openSaveStatisticsWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText, bool& saveStatisticsOpen, float totalIncome, float totalExpense, float budget);
 
 void DownloadStats(const std::string& userEmail, double totalIncome, double totalExpense, double totalBudget) {
-    // Initialize the Python interpreter
-    Py_Initialize();
+    // Determine if the budget is low or high
+    std::string budgetStatus = (totalBudget < totalIncome - totalExpense) ? "Your budget is low." : "Your budget is high.";
 
-    // Load the module containing your 'Download' function
-    PyObject* pName = PyUnicode_DecodeFSDefault("DownloadStats"); // Ensure this is the correct module name
-    PyObject* pModule = PyImport_Import(pName);
-    Py_XDECREF(pName);
+    // Define the userData directory path
+    std::string userDataDir = "userData";
 
-    if (pModule != nullptr) {
-        // Get the 'Download' function
-        PyObject* pFunc = PyObject_GetAttrString(pModule, "Download");
-        if (pFunc && PyCallable_Check(pFunc)) {
-            // Prepare the arguments for the Download function
-            PyObject* pArgs = PyTuple_Pack(4,
-                PyUnicode_FromString(userEmail.c_str()),
-                PyFloat_FromDouble(totalIncome),
-                PyFloat_FromDouble(totalExpense),
-                PyFloat_FromDouble(totalBudget)
-            );
+    // Use the email as the filename
+    std::string fileName = userEmail + "_stats.txt"; // Save with the email
+    std::string filePath = userDataDir + "/" + fileName;
 
-            if (pArgs != nullptr) {
-                // Call the Download function
-                PyObject* pValue = PyObject_CallObject(pFunc, pArgs);
-                Py_DECREF(pArgs); // Clean up argument tuple
-                if (pValue != nullptr) {
-                    // Process return value if needed
-                    Py_DECREF(pValue); // Clean up return value
-                    std::cout << "Download function called successfully!" << std::endl;
-                }
-                else {
-                    PyErr_Print();
-                    std::cerr << "Call to Download function failed." << std::endl;
-                }
-            }
-            else {
-                std::cerr << "Error packing arguments for the Download function." << std::endl;
-            }
-        }
-        else {
-            if (pFunc == nullptr) {
-                std::cerr << "Function Download not found in module." << std::endl;
-            }
-            else {
-                std::cerr << "Download is not callable." << std::endl;
-            }
-            PyErr_Print();
-        }
+    // Create and open the text file at the specified path
+    std::ofstream outputFile(filePath);
 
-        // Clean up
-        Py_XDECREF(pFunc);
-        Py_DECREF(pModule);
+    if (outputFile.is_open()) {
+        // Write the statistics to the file
+        outputFile << "Email: " << userEmail << "\n";
+        outputFile << "Income: " << totalIncome << "\n";
+        outputFile << "Expense: " << totalExpense << "\n";
+        outputFile << "Budget: " << totalBudget << "\n";
+        outputFile << budgetStatus << "\n";
+
+        outputFile.close(); // Close the file
+        std::cout << "Statistics written to " << filePath << " successfully!" << std::endl;
     }
     else {
-        std::cerr << "Failed to load the module." << std::endl;
-        PyErr_Print();
+        std::cerr << "Failed to create the file." << std::endl;
     }
 
-    // Finalize the Python interpreter
-    Py_Finalize();
 }
+
 
 
 
@@ -251,9 +222,22 @@ void openSaveStatisticsWindow(sf::RenderWindow& window, const sf::Sprite& backgr
         downloadButton.getPosition().y + (downloadButton.getSize().y - downloadText.getGlobalBounds().height) / 2
     );
 
-    sf::Text messageText("Press Download to receive statistics via email!", font, 20);
+    // Back button
+    sf::RectangleShape backButton(sf::Vector2f(150, 50));
+    backButton.setFillColor(sf::Color(200, 50, 50)); // Set the back button color to red
+    backButton.setPosition(window.getSize().x / 2 - backButton.getSize().x / 2, 600);
+
+    // Text on Back button
+    sf::Text backText("Back", font, 24);
+    backText.setFillColor(sf::Color::White);
+    backText.setPosition(
+        backButton.getPosition().x + (backButton.getSize().x - backText.getGlobalBounds().width) / 2,
+        backButton.getPosition().y + (backButton.getSize().y - backText.getGlobalBounds().height) / 2
+    );
+
+    sf::Text messageText("Press Download to export a txt file of your statistics!", font, 20);
     messageText.setFillColor(sf::Color::White);
-    messageText.setPosition(window.getSize().x / 2 - messageText.getGlobalBounds().width / 2, 600);
+    messageText.setPosition(window.getSize().x / 2 - messageText.getGlobalBounds().width / 2, 700);
 
     bool downloadPressed = false;
 
@@ -267,9 +251,11 @@ void openSaveStatisticsWindow(sf::RenderWindow& window, const sf::Sprite& backgr
 
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+                // Handle download button
                 if (downloadButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                     downloadPressed = true;
-                    messageText.setString("Download requested! Check your email.");
+                    messageText.setString("Download requested! Check in userData folder.");
 
                     // Extract the user email from the emailText object (assuming it's set correctly)
                     std::string userEmail = emailText.getString();
@@ -277,7 +263,35 @@ void openSaveStatisticsWindow(sf::RenderWindow& window, const sf::Sprite& backgr
                     // Call the function to send the statistics via email
                     DownloadStats(userEmail, totalIncome, totalExpense, budget);
                 }
+
+                // Handle back button
+                if (backButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    saveStatisticsOpen = false; // Close the statistics window to return to the main menu
+                }
             }
+        }
+
+        // Hover effect for buttons
+        sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+        // Download button hover effect
+        if (downloadButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+            downloadButton.setSize(sf::Vector2f(155, 55)); // Slightly enlarge the button
+            downloadButton.setFillColor(sf::Color(70, 70, 200)); // Darken color
+        }
+        else {
+            downloadButton.setSize(sf::Vector2f(150, 50)); // Reset size
+            downloadButton.setFillColor(sf::Color(50, 50, 150)); // Reset color
+        }
+
+        // Back button hover effect
+        if (backButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+            backButton.setSize(sf::Vector2f(155, 55)); // Slightly enlarge the button
+            backButton.setFillColor(sf::Color(220, 70, 70)); // Darken red color
+        }
+        else {
+            backButton.setSize(sf::Vector2f(150, 50)); // Reset size
+            backButton.setFillColor(sf::Color(200, 50, 50)); // Reset color
         }
 
         window.clear();
@@ -286,10 +300,13 @@ void openSaveStatisticsWindow(sf::RenderWindow& window, const sf::Sprite& backgr
         window.draw(titleText);
         window.draw(downloadButton);
         window.draw(downloadText);
+        window.draw(backButton);
+        window.draw(backText);
         window.draw(messageText);
         window.display();
     }
 }
+
 
 float calculateExpression(const std::string& expression) {
     std::istringstream iss(expression);
