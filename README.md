@@ -46,8 +46,8 @@ https://github.com/codingburgas/finance-challenge-byte-coders.git
 ## 🖥 Team Members
 * **Borislav Petkov** - *Scrum trainer* 
 * **Simeon Kalamerov** - *Back-end developer* 
-* **Ivailo Lalev** - *Back-end developer* 
-* **Stiliqn Dylgerov** - *Back-end developer*
+* **Ivailo Lalev** - *Front-end/Back-end developer* 
+* **Stiliqn Dylgerov** - *Designer*
 
 
  
