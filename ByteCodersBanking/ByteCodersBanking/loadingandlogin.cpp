@@ -220,10 +220,19 @@ void handleInput(sf::Event event) {
 
 void loadAndResize() {
     // Initial window setup
-    sf::RenderWindow window(sf::VideoMode(400, 200), "Banking App", sf::Style::None);
+    sf::RenderWindow window(sf::VideoMode(400, 200), "Banking App", sf::Style::None); // Set initial size to 200x400
     sf::Clock clock;
 
-    // Display initial black screen for 5 seconds
+    // Load LoadingLogo texture for the small window
+    sf::Texture loadingLogoTexture;
+    if (!loadingLogoTexture.loadFromFile("content/images/LoadingLogo.png")) return; // Ensure the path is correct
+    sf::Sprite loadingLogoSprite(loadingLogoTexture);
+    loadingLogoSprite.setScale(
+        static_cast<float>(400) / loadingLogoTexture.getSize().x,
+        static_cast<float>(200) / loadingLogoTexture.getSize().y
+    );
+
+    // Display initial loading logo for 5 seconds
     while (window.isOpen() && clock.getElapsedTime().asSeconds() < 5) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -232,7 +241,8 @@ void loadAndResize() {
                 return;  // Exit the function
             }
         }
-        window.clear(sf::Color::Black);
+        window.clear();
+        window.draw(loadingLogoSprite); // Draw loading logo
         window.display();
     }
 
@@ -370,5 +380,4 @@ void loadAndResize() {
 
         window.display();
     }
-
 }
