@@ -141,12 +141,10 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="loadingandlogin.cpp" />
-    <ClCompile Include="verify.cpp" />
     <ClCompile Include="byteCodersEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="byteCodersEngine.h" />
-    <ClInclude Include="verify.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

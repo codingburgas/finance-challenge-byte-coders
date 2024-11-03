@@ -1,46 +1,46 @@
 ﻿  byteCodersEngine.cpp
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(81,55): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(80,63): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(200,48): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(200,48): warning C4244:         with
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(200,48): warning C4244:         [
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(200,48): warning C4244:             T=unsigned int
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(200,48): warning C4244:         ]
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(238,61): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(238,61): warning C4244:         with
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(238,61): warning C4244:         [
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(238,61): warning C4244:             T=float
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(238,61): warning C4244:         ]
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(238,48): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(238,48): warning C4244:         with
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(238,48): warning C4244:         [
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(238,48): warning C4244:             T=float
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(238,48): warning C4244:         ]
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(241,17): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(240,114): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(240,114): warning C4244:         with
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(240,114): warning C4244:         [
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(240,114): warning C4244:             T=unsigned int
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(240,114): warning C4244:         ]
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(269,47): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(269,47): warning C4244:         with
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(269,47): warning C4244:         [
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(269,47): warning C4244:             T=unsigned int
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(269,47): warning C4244:         ]
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(347,62): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(347,62): warning C4244:         with
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(347,62): warning C4244:         [
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(347,62): warning C4244:             T=float
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(347,62): warning C4244:         ]
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(347,49): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(347,49): warning C4244:         with
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(347,49): warning C4244:         [
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(347,49): warning C4244:             T=float
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(347,49): warning C4244:         ]
-F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(302,66): warning C4101: 'e': unreferenced local variable
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(152,55): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(151,63): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(352,48): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(352,48): warning C4244:         with
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(352,48): warning C4244:         [
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(352,48): warning C4244:             T=unsigned int
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(352,48): warning C4244:         ]
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(390,61): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(390,61): warning C4244:         with
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(390,61): warning C4244:         [
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(390,61): warning C4244:             T=float
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(390,61): warning C4244:         ]
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(390,48): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(390,48): warning C4244:         with
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(390,48): warning C4244:         [
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(390,48): warning C4244:             T=float
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(390,48): warning C4244:         ]
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(393,17): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(392,114): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(392,114): warning C4244:         with
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(392,114): warning C4244:         [
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(392,114): warning C4244:             T=unsigned int
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(392,114): warning C4244:         ]
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(421,47): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(421,47): warning C4244:         with
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(421,47): warning C4244:         [
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(421,47): warning C4244:             T=unsigned int
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(421,47): warning C4244:         ]
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(499,62): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(499,62): warning C4244:         with
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(499,62): warning C4244:         [
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(499,62): warning C4244:             T=float
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(499,62): warning C4244:         ]
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(499,49): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(499,49): warning C4244:         with
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(499,49): warning C4244:         [
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(499,49): warning C4244:             T=float
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(499,49): warning C4244:         ]
+F:\752\CodingStuff\ByteCoders\ByteCodersBanking\ByteCodersBanking\byteCodersEngine.cpp(454,66): warning C4101: 'e': unreferenced local variable
   Generating code
-  1 of 698 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+  0 of 703 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   ByteCodersBanking.vcxproj -> F:\752\CodingStuff\ByteCoders\ByteCodersBanking\x64\Release\ByteCodersBanking.exe

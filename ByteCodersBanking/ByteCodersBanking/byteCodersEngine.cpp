@@ -1,5 +1,8 @@
 #include "byteCodersEngine.h"
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -8,14 +11,81 @@
 #include <stack>
 #include <cctype>
 #include <stdexcept>
+#include "Python/Python.h"
 
 void openCalculatorWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText, bool& calculatorOpen, float& totalIncome, float& totalExpense, float& budget);
+
+void openSaveStatisticsWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText, bool& saveStatisticsOpen, float totalIncome, float totalExpense, float budget);
+
+void DownloadStats(const std::string& userEmail, double totalIncome, double totalExpense, double totalBudget) {
+    // Initialize the Python interpreter
+    Py_Initialize();
+
+    // Load the module containing your 'Download' function
+    PyObject* pName = PyUnicode_DecodeFSDefault("DownloadStats"); // Ensure this is the correct module name
+    PyObject* pModule = PyImport_Import(pName);
+    Py_XDECREF(pName);
+
+    if (pModule != nullptr) {
+        // Get the 'Download' function
+        PyObject* pFunc = PyObject_GetAttrString(pModule, "Download");
+        if (pFunc && PyCallable_Check(pFunc)) {
+            // Prepare the arguments for the Download function
+            PyObject* pArgs = PyTuple_Pack(4,
+                PyUnicode_FromString(userEmail.c_str()),
+                PyFloat_FromDouble(totalIncome),
+                PyFloat_FromDouble(totalExpense),
+                PyFloat_FromDouble(totalBudget)
+            );
+
+            if (pArgs != nullptr) {
+                // Call the Download function
+                PyObject* pValue = PyObject_CallObject(pFunc, pArgs);
+                Py_DECREF(pArgs); // Clean up argument tuple
+                if (pValue != nullptr) {
+                    // Process return value if needed
+                    Py_DECREF(pValue); // Clean up return value
+                    std::cout << "Download function called successfully!" << std::endl;
+                }
+                else {
+                    PyErr_Print();
+                    std::cerr << "Call to Download function failed." << std::endl;
+                }
+            }
+            else {
+                std::cerr << "Error packing arguments for the Download function." << std::endl;
+            }
+        }
+        else {
+            if (pFunc == nullptr) {
+                std::cerr << "Function Download not found in module." << std::endl;
+            }
+            else {
+                std::cerr << "Download is not callable." << std::endl;
+            }
+            PyErr_Print();
+        }
+
+        // Clean up
+        Py_XDECREF(pFunc);
+        Py_DECREF(pModule);
+    }
+    else {
+        std::cerr << "Failed to load the module." << std::endl;
+        PyErr_Print();
+    }
+
+    // Finalize the Python interpreter
+    Py_Finalize();
+}
+
+
 
 void ByteCodersEngine::main(const std::string& userEmail) {
     sf::VideoMode desktopMode = sf::VideoMode::getDesktopMode();
     unsigned int windowWidth = static_cast<unsigned int>(desktopMode.width * 0.6);
     unsigned int windowHeight = static_cast<unsigned int>(desktopMode.height * 0.6);
-    std::cout << userEmail;
+
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "ByteCoders Engine");
 
     // Load background
@@ -49,6 +119,7 @@ void ByteCodersEngine::main(const std::string& userEmail) {
     // Local variables for financial data
     float totalIncome = 0.0f;
     float totalExpense = 0.0f;
+    float budget = 0.0f;
 
     // Set up button textures
     std::vector<sf::Texture> buttonTextures(5);
@@ -86,38 +157,125 @@ void ByteCodersEngine::main(const std::string& userEmail) {
         );
     }
 
-    bool calculatorOpen = false; // Flag to track calculator state
+    bool calculatorOpen = false;        // Flag to track calculator state
+    bool saveStatisticsOpen = false;    // Flag to track Save Statistics state
 
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            // Check for mouse clicks and button bounds
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                 sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                if (!calculatorOpen && buttons[1].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
-                    calculatorOpen = true; // Open the calculator
+
+                // Check each button and open the corresponding screen
+                if (buttons[1].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    calculatorOpen = true;      // Open Calculator screen
+                    saveStatisticsOpen = false; // Close Save Statistics screen if open
+                }
+                if (buttons[3].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    saveStatisticsOpen = true;  // Open Save Statistics screen
+                    calculatorOpen = false;     // Close Calculator screen if open
                 }
             }
         }
 
+        // Update hover effects
         sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-
-        // Check for hover effects
-        for (int i = 0; i < buttons.size(); ++i) {
-            if (!calculatorOpen) {
-                if (buttons[i].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
-                    if (!isHovered[i]) {
-                        buttons[i].setScale(1.2f * buttons[i].getScale().x, 1.2f * buttons[i].getScale().y);
-                        isHovered[i] = true;
-                    }
+        for (size_t i = 0; i < buttons.size(); ++i) {
+            if (buttons[i].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                if (!isHovered[i]) {
+                    buttons[i].setScale(1.1f * static_cast<float>(buttonWidth) / buttonTextures[i].getSize().x,
+                        1.1f * static_cast<float>(buttonHeight) / buttonTextures[i].getSize().y);
+                    isHovered[i] = true;
                 }
-                else {
-                    if (isHovered[i]) {
-                        buttons[i].setScale(static_cast<float>(buttonWidth) / buttonTextures[i].getSize().x,
-                            static_cast<float>(buttonHeight) / buttonTextures[i].getSize().y);
-                        isHovered[i] = false;
-                    }
+            }
+            else {
+                if (isHovered[i]) {
+                    buttons[i].setScale(static_cast<float>(buttonWidth) / buttonTextures[i].getSize().x,
+                        static_cast<float>(buttonHeight) / buttonTextures[i].getSize().y);
+                    isHovered[i] = false;
+                }
+            }
+        }
+
+        // Clear window for drawing
+        window.clear();
+        window.draw(backgroundSprite);
+        window.draw(emailText);
+
+        // Draw the specific screen if one is open
+        if (calculatorOpen) {
+            openCalculatorWindow(window, backgroundSprite, emailText, calculatorOpen, totalIncome, totalExpense, budget);
+        }
+        else if (saveStatisticsOpen) {
+            openSaveStatisticsWindow(window, backgroundSprite, emailText, saveStatisticsOpen, totalIncome, totalExpense, budget);
+        }
+        else {
+            // If no screen is open, draw the buttons
+            for (auto& button : buttons) {
+                window.draw(button);
+            }
+        }
+
+        // Display everything on the window
+        window.display();
+    }
+}
+
+
+void openSaveStatisticsWindow(sf::RenderWindow& window, const sf::Sprite& backgroundSprite, const sf::Text& emailText, bool& saveStatisticsOpen, float totalIncome, float totalExpense, float budget) {
+    sf::Font font;
+    if (!font.loadFromFile("content/fonts/SourceSansPro-Semibold.otf")) {
+        std::cerr << "Failed to load font!" << std::endl;
+        return;
+    }
+
+    // Title for Save Statistics
+    sf::Text titleText("SAVE STATISTICS", font, 30);
+    titleText.setFillColor(sf::Color::White);
+    titleText.setPosition(window.getSize().x / 2 - titleText.getGlobalBounds().width / 2, 200);
+
+    // Download button
+    sf::RectangleShape downloadButton(sf::Vector2f(150, 50));
+    downloadButton.setFillColor(sf::Color(50, 50, 150));
+    downloadButton.setPosition(window.getSize().x / 2 - downloadButton.getSize().x / 2, 500);
+
+    // Text on Download button
+    sf::Text downloadText("Download", font, 24);
+    downloadText.setFillColor(sf::Color::White);
+    downloadText.setPosition(
+        downloadButton.getPosition().x + (downloadButton.getSize().x - downloadText.getGlobalBounds().width) / 2,
+        downloadButton.getPosition().y + (downloadButton.getSize().y - downloadText.getGlobalBounds().height) / 2
+    );
+
+    sf::Text messageText("Press Download to receive statistics via email!", font, 20);
+    messageText.setFillColor(sf::Color::White);
+    messageText.setPosition(window.getSize().x / 2 - messageText.getGlobalBounds().width / 2, 600);
+
+    bool downloadPressed = false;
+
+    while (saveStatisticsOpen) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                saveStatisticsOpen = false;
+                window.close();
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                if (downloadButton.getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                    downloadPressed = true;
+                    messageText.setString("Download requested! Check your email.");
+
+                    // Extract the user email from the emailText object (assuming it's set correctly)
+                    std::string userEmail = emailText.getString();
+
+                    // Call the function to send the statistics via email
+                    DownloadStats(userEmail, totalIncome, totalExpense, budget);
                 }
             }
         }
@@ -125,16 +283,10 @@ void ByteCodersEngine::main(const std::string& userEmail) {
         window.clear();
         window.draw(backgroundSprite);
         window.draw(emailText);
-
-        if (!calculatorOpen) {
-            for (auto& button : buttons) {
-                window.draw(button);
-            }
-        }
-        else {
-            openCalculatorWindow(window, backgroundSprite, emailText, calculatorOpen, totalIncome, totalExpense,budget);
-        }
-
+        window.draw(titleText);
+        window.draw(downloadButton);
+        window.draw(downloadText);
+        window.draw(messageText);
         window.display();
     }
 }
