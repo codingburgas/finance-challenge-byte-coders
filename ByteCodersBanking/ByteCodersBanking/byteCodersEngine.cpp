@@ -93,13 +93,11 @@ void ByteCodersEngine::main(const std::string& userEmail) {
     float budget = 0.0f;
 
     // Set up button textures
-    std::vector<sf::Texture> buttonTextures(5);
+    std::vector<sf::Texture> buttonTextures(3); // Now we have 3 buttons
     const std::vector<std::string> buttonTexturePaths = {
-        "content/images/accountButton1.png",
-        "content/images/CalculatorButton2.png",
-        "content/images/transactionButton3.png",
-        "content/images/SubscrionsButton4.png",
-        "content/images/BudjetButton5.png"
+        "content/images/accountButton1.png",  // Button 1
+        "content/images/CalculatorButton2.png", // Button 2
+        "content/images/SubscrionsButton4.png"  // Button 4
     };
 
     for (size_t i = 0; i < buttonTextures.size(); ++i) {
@@ -115,12 +113,12 @@ void ByteCodersEngine::main(const std::string& userEmail) {
     std::vector<sf::Sprite> buttons(buttonTextures.size());
     std::vector<bool> isHovered(buttonTextures.size(), false);
 
-    // Set buttons in a 2x3 grid
+    // Set buttons in a horizontal row
     for (int i = 0; i < buttonTextures.size(); ++i) {
         buttons[i].setTexture(buttonTextures[i]);
         buttons[i].setPosition(
-            (windowWidth - buttonWidth * 3 - spacing * 2) / 2 + (i % 3) * (buttonWidth + spacing),
-            windowHeight / 2 - (buttonHeight * 1) / 2 + (i / 3) * (buttonHeight + spacing) // Center vertically
+            (windowWidth - buttonWidth * 3 - spacing * 2) / 2 + i * (buttonWidth + spacing),
+            windowHeight / 2 - (buttonHeight / 2) // Center vertically
         );
         buttons[i].setScale(
             static_cast<float>(buttonWidth) / buttonTextures[i].getSize().x,
@@ -146,7 +144,7 @@ void ByteCodersEngine::main(const std::string& userEmail) {
                     calculatorOpen = true;      // Open Calculator screen
                     saveStatisticsOpen = false; // Close Save Statistics screen if open
                 }
-                if (buttons[3].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
+                if (buttons[2].getGlobalBounds().contains(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y))) {
                     saveStatisticsOpen = true;  // Open Save Statistics screen
                     calculatorOpen = false;     // Close Calculator screen if open
                 }
