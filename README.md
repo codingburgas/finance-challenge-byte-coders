@@ -1,7 +1,7 @@
 <h1 align="center">Byte Coders</h1>
 
 <p align = "center">
-<img src="https://static.wixstatic.com/media/82d267_2b7ef74c0db74ed49a824f728526e121~mv2.png/v1/fill/w_200,h_73,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/byte-coders-high-resolution-logo-transparent.png" alt="Logo"/>
+<img src="https://static.wixstatic.com/media/82d267_85483531f1994eecb364780fa01915e7~mv2.png/v1/fill/w_198,h_126,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/82d267_85483531f1994eecb364780fa01915e7~mv2.png" alt="Logo"/>
 </p>
 
 <br>
